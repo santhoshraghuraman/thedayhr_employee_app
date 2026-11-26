@@ -256,15 +256,15 @@ flutter test
 
 ## 14. Screenshots
 
-Add captured screenshots in a `docs/screenshots/` folder before final submission:
+Actual screenshots captured from the release APK running on an Android smartphone:
 
-| Screen | Placeholder |
+| Screen | Screenshot |
 | :--- | :--- |
-| **Employee Login** | `![Employee Login](docs/screenshots/01_login.png)` |
-| **HRMS Dashboard (Checked In)** | `![HRMS Dashboard](docs/screenshots/02_hrms_dashboard.png)` |
-| **Attendance History** | `![Attendance History](docs/screenshots/03_attendance_history.png)` |
-| **Chat Contact Directory** | `![Chat Contacts](docs/screenshots/04_chat_contacts.png)` |
-| **One-to-One Conversation** | `![Chat Conversation](docs/screenshots/05_chat_conversation.png)` |
+| **Employee Login** | ![Employee Login](docs/screenshots/01_login.png) |
+| **HRMS Dashboard** | ![HRMS Dashboard](docs/screenshots/02_hrms_dashboard.png) |
+| **Attendance History** | ![Attendance History](docs/screenshots/03_attendance_history.png) |
+| **Chat Contact Directory** | ![Chat Contacts](docs/screenshots/04_chat_contacts.png) |
+| **One-to-One Conversation** | ![Chat Conversation](docs/screenshots/05_chat_conversation.png) |
 
 ---
 
