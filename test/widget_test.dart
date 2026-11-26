@@ -164,12 +164,72 @@ void main() {
     expect(find.text('Attendance History'), findsOneWidget);
     expect(find.text('Sample'), findsWidgets);
 
-    // Switch to Chat Mode and verify placeholder is shown.
+    // Switch to Chat Mode and verify contact directory is shown.
     await tester.tap(find.text('Chat'));
     await tester.pumpAndSettle();
 
     expect(find.text('Chat Mode'), findsOneWidget);
-    expect(find.text('Internal Chat Module'), findsOneWidget);
+    expect(find.text('Team Directory'), findsOneWidget);
+    expect(find.text('Ananya Nair'), findsOneWidget);
+
+    // Search for a contact and open individual conversation.
+    await tester.enterText(
+      find.byKey(const Key('chat_search_field')),
+      'Ananya',
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('Karthik Menon'), findsNothing);
+
+    await tester.tap(find.byKey(const Key('chat_contact_tile_EMP-1088')));
+    await tester.pumpAndSettle();
+
+    // Verify seeded received message is left-aligned.
+    final receivedBubbleText = find.textContaining('Welcome to TheDayHR');
+    expect(receivedBubbleText, findsOneWidget);
+    final receivedAlign = tester.widget<Align>(
+      find
+          .ancestor(
+            of: receivedBubbleText,
+            matching: find.byType(Align),
+          )
+          .first,
+    );
+    expect(receivedAlign.alignment, Alignment.centerLeft);
+
+    // Empty message send is prevented.
+    await tester.tap(find.byKey(const Key('chat_send_button')));
+    await tester.pumpAndSettle();
+    expect(
+      find.text('Please enter a message before sending.'),
+      findsOneWidget,
+    );
+
+    // Send a real message and verify it renders right-aligned.
+    await tester.enterText(
+      find.byKey(const Key('chat_message_input')),
+      'Checked in and starting today tasks!',
+    );
+    await tester.tap(find.byKey(const Key('chat_send_button')));
+    await tester.pumpAndSettle();
+
+    final sentBubbleText = find.text('Checked in and starting today tasks!');
+    expect(sentBubbleText, findsOneWidget);
+    final sentAlign = tester.widget<Align>(
+      find
+          .ancestor(
+            of: sentBubbleText,
+            matching: find.byType(Align),
+          )
+          .first,
+    );
+    expect(sentAlign.alignment, Alignment.centerRight);
+
+    // Type an unsent draft, switch to HRMS Mode and back to Chat Mode, verify preservation.
+    await tester.enterText(
+      find.byKey(const Key('chat_message_input')),
+      'Draft kept across modes',
+    );
+    await tester.pumpAndSettle();
 
     // Switch back to HRMS Mode and verify Attendance History screen & checked-in state are preserved.
     await tester.tap(find.text('HRMS'));
@@ -177,6 +237,24 @@ void main() {
 
     expect(find.text('HRMS Mode'), findsOneWidget);
     expect(find.text('Attendance History'), findsOneWidget);
+
+    // Switch back to Chat Mode and confirm open conversation & unsent draft are intact.
+    await tester.tap(find.text('Chat'));
+    await tester.pumpAndSettle();
+    expect(find.text('Ananya Nair'), findsOneWidget);
+    expect(find.text('Draft kept across modes'), findsOneWidget);
+
+    // Navigate back to contacts and verify latest preview updated.
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+    expect(
+      find.text('You: Checked in and starting today tasks!'),
+      findsOneWidget,
+    );
+
+    // Return to HRMS Mode and complete Check Out.
+    await tester.tap(find.text('HRMS'));
+    await tester.pumpAndSettle();
 
     // Pop back to HRMS Dashboard and perform Check Out.
     await tester.tap(find.byType(BackButton));

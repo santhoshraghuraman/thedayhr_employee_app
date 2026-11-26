@@ -3,12 +3,47 @@ import 'package:intl/intl.dart';
 /// Shared date, time, and duration formatters powered by `intl`.
 abstract final class DateTimeFormatter {
   static final DateFormat _dateFormat = DateFormat('EEE, dd MMM yyyy');
+  static final DateFormat _shortDateFormat = DateFormat('dd MMM');
   static final DateFormat _timeFormat = DateFormat('hh:mm a');
   static final DateFormat _clockFormat = DateFormat('hh:mm:ss a');
   static final DateFormat _dateKeyFormat = DateFormat('yyyy-MM-dd');
 
   /// Formats a date such as `Thu, 26 Nov 2026`.
   static String formatDate(DateTime dateTime) => _dateFormat.format(dateTime);
+
+  /// Formats a human-friendly day label (`Today`, `Yesterday`, or full date)
+  /// for chat conversation date separators.
+  static String formatChatDaySeparator(
+    DateTime dateTime,
+    DateTime referenceNow,
+  ) {
+    final targetKey = toDateKey(dateTime);
+    final todayKey = toDateKey(referenceNow);
+    if (targetKey == todayKey) {
+      return 'Today';
+    }
+    final yesterday = referenceNow.subtract(const Duration(days: 1));
+    if (targetKey == toDateKey(yesterday)) {
+      return 'Yesterday';
+    }
+    return formatDate(dateTime);
+  }
+
+  /// Formats a compact timestamp for chat contact list previews.
+  static String formatContactTimestamp(
+    DateTime dateTime,
+    DateTime referenceNow,
+  ) {
+    final targetKey = toDateKey(dateTime);
+    if (targetKey == toDateKey(referenceNow)) {
+      return formatTime(dateTime);
+    }
+    final yesterday = referenceNow.subtract(const Duration(days: 1));
+    if (targetKey == toDateKey(yesterday)) {
+      return 'Yesterday';
+    }
+    return _shortDateFormat.format(dateTime);
+  }
 
   /// Formats a short time such as `09:30 AM`.
   static String formatTime(DateTime dateTime) => _timeFormat.format(dateTime);

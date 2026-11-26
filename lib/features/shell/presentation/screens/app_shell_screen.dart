@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:thedayhr_employee_app/core/theme/app_theme.dart';
 import 'package:thedayhr_employee_app/features/auth/presentation/providers/auth_provider.dart';
-import 'package:thedayhr_employee_app/features/chat/presentation/screens/chat_placeholder_screen.dart';
+import 'package:thedayhr_employee_app/features/chat/presentation/screens/chat_contacts_screen.dart';
 import 'package:thedayhr_employee_app/features/hrms/presentation/screens/hrms_dashboard_screen.dart';
 import 'package:thedayhr_employee_app/features/shell/presentation/providers/mode_provider.dart';
 
@@ -85,7 +85,7 @@ class _AppShellScreenState extends ConsumerState<AppShellScreen> {
               _BranchNavigator(
                 navigatorKey: _chatNavigatorKey,
                 onStackChanged: _refreshCanPop,
-                rootBuilder: (_) => const ChatPlaceholderScreen(),
+                rootBuilder: (_) => const ChatContactsScreen(),
               ),
             ],
           );
