@@ -128,24 +128,20 @@ class AttendanceTile extends StatelessWidget {
             const SizedBox(height: 12),
             const Divider(height: 1, color: AppTheme.borderSubtle),
             const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
-                  child: _TimeMetric(
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final items = [
+                  _TimeMetric(
                     label: 'Check In',
                     value: DateTimeFormatter.formatTime(record.checkInTime),
                     icon: Icons.login_rounded,
                   ),
-                ),
-                Expanded(
-                  child: _TimeMetric(
+                  _TimeMetric(
                     label: 'Check Out',
                     value: checkOutText,
                     icon: Icons.logout_rounded,
                   ),
-                ),
-                Expanded(
-                  child: _TimeMetric(
+                  _TimeMetric(
                     label: 'Worked',
                     value: hoursText,
                     icon: Icons.schedule_rounded,
@@ -153,8 +149,22 @@ class AttendanceTile extends StatelessWidget {
                         ? AppTheme.warningColor
                         : AppTheme.textPrimary,
                   ),
-                ),
-              ],
+                ];
+
+                if (constraints.maxWidth < 300) {
+                  return Wrap(
+                    spacing: 20,
+                    runSpacing: 12,
+                    children: items,
+                  );
+                }
+
+                return Row(
+                  children: items
+                      .map((item) => Expanded(child: item))
+                      .toList(),
+                );
+              },
             ),
           ],
         ),
@@ -182,15 +192,20 @@ class _TimeMetric extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Icon(icon, size: 13, color: AppTheme.textSecondary),
             const SizedBox(width: 4),
-            Text(
-              label,
-              style: const TextStyle(
-                fontSize: 12,
-                color: AppTheme.textSecondary,
-                fontWeight: FontWeight.w500,
+            Flexible(
+              child: Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: AppTheme.textSecondary,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
           ],

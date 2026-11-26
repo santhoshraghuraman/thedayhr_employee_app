@@ -300,15 +300,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                                     color: AppTheme.primaryColor,
                                   ),
                                   const SizedBox(width: 8),
-                                  Text(
-                                    'Demo Employee Credentials',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleSmall
-                                        ?.copyWith(
-                                          fontWeight: FontWeight.w700,
-                                          color: AppTheme.primaryColor,
-                                        ),
+                                  Expanded(
+                                    child: Text(
+                                      'Demo Employee Credentials',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.w700,
+                                            color: AppTheme.primaryColor,
+                                          ),
+                                    ),
                                   ),
                                 ],
                               ),

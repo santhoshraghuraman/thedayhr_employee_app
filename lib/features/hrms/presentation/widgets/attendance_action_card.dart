@@ -59,43 +59,53 @@ class AttendanceActionCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Text(
-                  'Today\'s Attendance',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        color: AppTheme.textPrimary,
-                      ),
-                ),
-                const Spacer(),
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 240),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 5,
-                  ),
-                  decoration: BoxDecoration(
-                    color: badgeColor.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(badgeIcon, size: 15, color: badgeColor),
-                      const SizedBox(width: 5),
-                      Text(
-                        badgeText,
-                        style: TextStyle(
-                          fontSize: 12,
+            SizedBox(
+              width: double.infinity,
+              child: Wrap(
+                spacing: 10,
+                runSpacing: 8,
+                alignment: WrapAlignment.spaceBetween,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  Text(
+                    'Today\'s Attendance',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.w700,
-                          color: badgeColor,
+                          color: AppTheme.textPrimary,
                         ),
-                      ),
-                    ],
                   ),
-                ),
-              ],
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 240),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 5,
+                    ),
+                    decoration: BoxDecoration(
+                      color: badgeColor.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(badgeIcon, size: 15, color: badgeColor),
+                        const SizedBox(width: 5),
+                        Flexible(
+                          child: Text(
+                            badgeText,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: badgeColor,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 16),
             AnimatedSwitcher(
@@ -132,26 +142,32 @@ class AttendanceActionCard extends StatelessWidget {
                   TodayAttendanceStatus.checkedIn => Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              'Elapsed Working Time',
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: AppTheme.textSecondary,
-                                fontWeight: FontWeight.w500,
+                        SizedBox(
+                          width: double.infinity,
+                          child: Wrap(
+                            spacing: 8,
+                            runSpacing: 4,
+                            alignment: WrapAlignment.spaceBetween,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              const Text(
+                                'Elapsed Working Time',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: AppTheme.textSecondary,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
-                            ),
-                            Text(
-                              'In at ${DateTimeFormatter.formatTime(todayRecord!.checkInTime)}',
-                              style: const TextStyle(
-                                fontSize: 13,
-                                color: AppTheme.textPrimary,
-                                fontWeight: FontWeight.w600,
+                              Text(
+                                'In at ${DateTimeFormatter.formatTime(todayRecord!.checkInTime)}',
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  color: AppTheme.textPrimary,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                         const SizedBox(height: 6),
                         Text(
@@ -173,31 +189,37 @@ class AttendanceActionCard extends StatelessWidget {
                   TodayAttendanceStatus.checkedOut => Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              'Completed Working Duration',
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: AppTheme.textSecondary,
-                                fontWeight: FontWeight.w500,
+                        SizedBox(
+                          width: double.infinity,
+                          child: Wrap(
+                            spacing: 8,
+                            runSpacing: 4,
+                            alignment: WrapAlignment.spaceBetween,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              const Text(
+                                'Completed Working Duration',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: AppTheme.textSecondary,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
-                            ),
-                            Text(
-                              DateTimeFormatter.formatHoursMinutes(
-                                todayRecord!.workedDuration,
+                              Text(
+                                DateTimeFormatter.formatHoursMinutes(
+                                  todayRecord!.workedDuration,
+                                ),
+                                key: const Key('hrms_completed_duration_text'),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.w800,
+                                      color: AppTheme.successColor,
+                                    ),
                               ),
-                              key: const Key('hrms_completed_duration_text'),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.w800,
-                                    color: AppTheme.successColor,
-                                  ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                         const SizedBox(height: 8),
                         Text(

@@ -284,4 +284,52 @@ void main() {
       isNull,
     );
   });
+
+  testWidgets('renders cleanly without overflow on narrow mobile and wide desktop viewports',
+      (tester) async {
+    addTearDown(() => tester.view.resetPhysicalSize());
+    addTearDown(() => tester.view.resetDevicePixelRatio());
+
+    // Ultra-narrow mobile phone (320x568) across Login, HRMS, History, Chat & Conversation.
+    tester.view.devicePixelRatio = 1.0;
+    tester.view.physicalSize = const Size(320, 568);
+    await pumpApp(tester);
+    expect(tester.takeException(), isNull);
+
+    await tester.ensureVisible(
+      find.byKey(const Key('fill_demo_employee_button')),
+    );
+    await tester.tap(find.byKey(const Key('fill_demo_employee_button')));
+    await tester.ensureVisible(find.byKey(const Key('login_submit_button')));
+    await tester.tap(find.byKey(const Key('login_submit_button')));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(NavigationBar), findsOneWidget);
+    await tester.ensureVisible(find.byKey(const Key('hrms_check_in_button')));
+    await tester.tap(find.byKey(const Key('hrms_check_in_button')));
+    await tester.pumpAndSettle();
+    expect(find.text('Checked In • Active Shift'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+
+    await tester.ensureVisible(
+      find.byKey(const Key('view_attendance_history_button')),
+    );
+    await tester.tap(find.byKey(const Key('view_attendance_history_button')));
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+
+    await tester.tap(find.text('Chat'));
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+
+    await tester.tap(find.byKey(const Key('chat_contact_tile_EMP-1088')));
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+
+    // Wide desktop/tablet viewport (1280x800) switches to NavigationRail.
+    tester.view.physicalSize = const Size(1280, 800);
+    await tester.pumpAndSettle();
+    expect(find.byType(NavigationRail), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
 }
